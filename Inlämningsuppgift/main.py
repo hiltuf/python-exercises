@@ -18,9 +18,9 @@ class Customer:
         if self.last_interaction is None:
             print(f"Ingen interaktion för {self.name}.")
             return None
-        print(self.last_interaction)
+        print(f"Senaste interaktionen (datum & tid) för {self.name}: {self.last_interaction}")
         days_since = (datetime.now() - self.last_interaction).days
-        print(f"Senaste interaktion i dagar för: {self.name}: {days_since}")
+        print(f"Senaste interaktion i dagar för {self.name}: {days_since}")
         return days_since
     
 
@@ -59,10 +59,8 @@ class CustomerDataSystem:
             if customer.email == email:
                 customer.interactions.append(interaction)
                 print(f'Kund {customer.name} har en ny interaktion: {interaction}')
-                customer.last_interaction = datetime.now()  # Sätt senaste interaktionen till nuvarande tid
-                print(f"Senaste interaktionen uppdaterad till: {customer.last_interaction}")
                 days_since = (datetime.now() - customer.last_interaction).days
-                print(f"Senaste interaktion i dagar för: {customer.name}: {days_since}")
+                print(f"Senaste interaktion i dagar för {customer.name}: {days_since}")
     
     def customer_interactions(self, email):
         for customer in self.customers:
@@ -111,7 +109,7 @@ C3.calculate_days_since_last_interaction()
 
 # NYA
 
-# SkapaR CustomerDataSystem åt bolaget Fenix AB
+# Skapar CustomerDataSystem åt bolaget Fenix AB
 CRM = CustomerDataSystem('Fenix AB')
 
 # Lägg till kunder i systemet
@@ -141,3 +139,5 @@ CRM.add_specific_interaction('hilmer@mail.com', 'Hur ska jag ändra min mejladre
 
 CRM.customer_interactions('hilmer@mail.com')
 CRM.customer_interactions('felix@mail.com')
+
+C1.calculate_days_since_last_interaction()
