@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import *
 
 class Customer:
     def __init__(self, name, email, phone, interactions=None, last_interaction=None):
@@ -12,15 +12,16 @@ class Customer:
         self.interactions.append(interaction)
         self.last_interaction = datetime.now()  # Sätt senaste interaktionen till nuvarande tid
         print(f"Ny interaktion tillagd för {self.name}: {interaction}")
-        print(f"Senaste interaktionen uppdaterad till: {self.last_interaction}")
+        print(f"Senaste interaktionen uppdaterad till: {self.last_interaction}\n")
 
     def calculate_days_since_last_interaction(self):
         if self.last_interaction is None:
-            print(f"Ingen interaktion för {self.name}.")
+            print(f"Ingen interaktion för {self.name}.\n")
             return None
         print(f"Senaste interaktionen (datum & tid) för {self.name}: {self.last_interaction}")
+        print(self.last_interaction)
         days_since = (datetime.now() - self.last_interaction).days
-        print(f"Senaste interaktion i dagar för {self.name}: {days_since}")
+        print(f"Senaste interaktion i dagar för {self.name}: {days_since}\n")
         return days_since
     
 
@@ -33,16 +34,16 @@ class CustomerDataSystem:
 
     def add_customer(self, customer):
         self.customers.append(customer)  # Lägg till Customer-objekt i listan
-        print(f"Kund {customer.name} med e-post {customer.email} har lagts till.")
+        print(f"Kund {customer.name} med e-post {customer.email} har lagts till.\n")
 
     def remove_customer(self, email):
         # Hitta kund baserat på e-post
         for customer in self.customers:
             if customer.email == email:
                 self.customers.remove(customer)
-                print(f"Kund {customer.name} med e-post {email} har tagits bort.")
+                print(f"Kund {customer.name} med e-post {email} har tagits bort.\n")
                 return
-        print(f"Ingen kund med e-post {email} hittades.")
+        print(f"Ingen kund med e-post {email} hittades.\n")
 
     def update_customer(self, email):
         # Hitta kund baserat på e-post
@@ -50,34 +51,36 @@ class CustomerDataSystem:
             if customer.email == email:
                 print(f"Kund {customer.name} telefonnummer: {customer.phone}")
                 customer.phone = input(f'Ange nya telefonnumret åt {customer.name}: ')
-                print(f"Kund {customer.name} telefonnummer har ändrats till: {customer.phone}")
+                print(f"Kund {customer.name} telefonnummer har ändrats till: {customer.phone}\n")
                 return
-        print(f"Ingen kund med e-post {email} hittades.")
+        print(f"Ingen kund med e-post {email} hittades.\n")
 
     def add_specific_interaction(self, email, interaction):
         for customer in self.customers:
             if customer.email == email:
                 customer.interactions.append(interaction)
                 print(f'Kund {customer.name} har en ny interaktion: {interaction}')
+                customer.last_interaction = datetime.now()
+                #customer.last_interaction = datetime.now() - timedelta(days=3) #Denna kan användas för testning
                 days_since = (datetime.now() - customer.last_interaction).days
-                print(f"Senaste interaktion i dagar för {customer.name}: {days_since}")
+                return days_since
     
     def customer_interactions(self, email):
         for customer in self.customers:
             if customer.email == email:
                 if not customer.interactions:
-                    print(f'Kund {customer.name} har inga interaktioner')
+                    print(f'Kund {customer.name} har inga interaktioner\n')
                 else:
-                    print(f'Kund {customer.name} interaktioner: {customer.interactions}')
+                    print(f'Kund {customer.name} interaktioner: {customer.interactions}\n')
 
 
     def list_customers(self):
         if not self.customers:
-            print("Det finns inga kunder i systemet.")
+            print("Det finns inga kunder i systemet\n.")
         else:
             print("Lista över alla kunder:")
             for customer in self.customers:
-                print(f"- {customer.name} telefon: {customer.phone}")
+                print(f"- {customer.name} telefon: {customer.phone}\n")
 
 
 
@@ -141,3 +144,4 @@ CRM.customer_interactions('hilmer@mail.com')
 CRM.customer_interactions('felix@mail.com')
 
 C1.calculate_days_since_last_interaction()
+C2.calculate_days_since_last_interaction()
