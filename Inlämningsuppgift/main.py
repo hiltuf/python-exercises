@@ -1,12 +1,12 @@
 from datetime import *
 
 class Customer:
-    def __init__(self, name, email, phone, interactions=None, last_interaction=None):
+    def __init__(self, name, email, phone, interactions=[], last_interaction=None):
         self.name = name
         self.email = email
         self.phone = phone
-        self.interactions = interactions if interactions is not None else []
-        self.last_interaction = last_interaction  # Datum och tid för senaste interaktion
+        self.interactions = interactions
+        self.last_interaction = last_interaction
 
     def add_interaction(self, interaction):
         self.interactions.append(interaction)
@@ -28,22 +28,51 @@ class Customer:
 
 
 class CustomerDataSystem:
-    def __init__(self, name, customers=None):
+    def __init__(self, name):
         self.name = name
-        self.customers = customers if customers is not None else []  # Lista för att hålla Customer-objekt
+        self.customers = []
 
     def add_customer(self, customer):
-        self.customers.append(customer)  # Lägg till Customer-objekt i listan
-        print(f"Kund {customer.name} med e-post {customer.email} har lagts till.\n")
+        while True:
+            try:
+                # Kontrollera om e-posten redan finns
+                for existing_customer in self.customers:
+                    if existing_customer.email == customer.email:
+                        raise ValueError(f"En kund med mejladress {customer.email} finns redan i systemet.\n")
+            
+                # Om ingen duplicering hittas, lägg till kunden
+                self.customers.append(customer)
+                print(f"Kund {customer.name} med e-post {customer.email} har lagts till.\n")
+                break  # Avsluta loopen
+            except ValueError as e:
+                print(e)  # Skriv ut felmeddelandet
+                customer.email = input(f"Ange en annan e-postadress för {customer.name}: ")
+
 
     def remove_customer(self, email):
         # Hitta kund baserat på e-post
-        for customer in self.customers:
-            if customer.email == email:
-                self.customers.remove(customer)
-                print(f"Kund {customer.name} med e-post {email} har tagits bort.\n")
-                return
-        print(f"Ingen kund med e-post {email} hittades.\n")
+        try:
+            customer_to_remove = None  # Variabel för att hålla den kund som ska tas bort
+
+            # Gå igenom alla kunder och leta efter en matchning
+            for customer in self.customers:
+                if customer.email == email:
+                    customer_to_remove = customer
+                    break  # Avsluta loopen om vi hittar kunden
+
+            # Om kunden inte finns
+            if customer_to_remove is None:
+                raise ValueError(f"Finns ingen kund med mejladress {email}.")
+            
+            # Om kunden hittades, ta bort den
+            self.customers.remove(customer_to_remove)
+            print(f"Kund {customer_to_remove.name} med e-post {email} har tagits bort.\n")
+        
+        except ValueError as e:
+            print(e)
+            print("Går inte att ta bort en icke existerande kund!!!\n")
+
+    
 
     def update_customer(self, email):
         # Hitta kund baserat på e-post
@@ -94,9 +123,10 @@ class CustomerDataSystem:
 
 
 # Testfall
-C1 = Customer('Hilmer', 'hilmer@mail.com', '3000')
-C2 = Customer('Jakob', 'jakob@mail.com', '2000')
-C3 = Customer('Felix', 'felix@mail.com', '1000')
+C1 = Customer('Hilmer', 'hilmer@mail.com', '073205565')
+C2 = Customer('Jakob', 'jakob@mail.com', '083205262')
+C3 = Customer('Felix', 'felix@mail.com', '093205212')
+C4 = Customer('Samuel', 'hilmer@mail.com', '043209621')
 
 # Lägg till interaktioner
 C1.add_interaction('Köpte en produkt')
@@ -119,6 +149,7 @@ CRM = CustomerDataSystem('Fenix AB')
 CRM.add_customer(C1)
 CRM.add_customer(C2)
 CRM.add_customer(C3)
+CRM.add_customer(C4) #Kund med samma mejl som C1 - Hamnar i ValueError
 
 # Lista alla kunder
 CRM.list_customers()

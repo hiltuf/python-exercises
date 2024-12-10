@@ -28,8 +28,8 @@
 ### **Metoddetaljer**
 
 # - Metoden för att lägga till en kund ska skapa ett nytt `Customer`objekt och lägga till det i listan. KLART
-- Kontrollera vid tillägg av kund att e-postadressen inte redan finns i systemet. Om den finns, kasta ett undantag (t.ex. `ValueError`).
+# - Kontrollera vid tillägg av kund att e-postadressen inte redan finns i systemet. Om den finns, kasta ett undantag (t.ex. `ValueError`).
 # - När en interaktion läggs till, ska det aktuella datumet och tiden lagras i kundens `last_interaction`. KLART
-- När en kund tas bort, kontrollera att kunden existerar i systemet. Om inte, kasta ett undantag (t.ex. `KeyError`).
+# - När en kund tas bort, kontrollera att kunden existerar i systemet. Om inte, kasta ett undantag (t.ex. `KeyError`).
 
-https://willandskill.notion.site/Exception-handling-undantagshantering-f512987dadf547ca921e1dfbe1299563
+# https://willandskill.notion.site/Exception-handling-undantagshantering-f512987dadf547ca921e1dfbe1299563
