@@ -1,11 +1,11 @@
 from datetime import *
 
 class Customer:
-    def __init__(self, name, email, phone, interactions=[], last_interaction=None):
+    def __init__(self, name, email, phone, interactions=None, last_interaction=None):
         self.name = name
         self.email = email
         self.phone = phone
-        self.interactions = interactions
+        self.interactions = interactions if interactions is not None else []
         self.last_interaction = last_interaction
 
     def add_interaction(self, interaction):
@@ -85,22 +85,35 @@ class CustomerDataSystem:
         print(f"Ingen kund med e-post {email} hittades.\n")
 
     def add_specific_interaction(self, email, interaction):
-        for customer in self.customers:
-            if customer.email == email:
-                customer.interactions.append(interaction)
-                print(f'Kund {customer.name} har en ny interaktion: {interaction}')
-                customer.last_interaction = datetime.now()
-                #customer.last_interaction = datetime.now() - timedelta(days=3) #Denna kan användas för testning
-                days_since = (datetime.now() - customer.last_interaction).days
-                return days_since
+        try:
+            for customer in self.customers:
+                if customer.email == email:
+                    # Lägg till interaktionen och uppdatera senaste interaktionen
+                    customer.interactions.append(interaction)
+                    print(f'Kund {customer.name} har en ny interaktion: {interaction}\n')
+                    customer.last_interaction = datetime.now()  # Uppdatera senaste interaktionstidpunkt
+
+                    # Beräkna och returnera antalet dagar sedan senaste interaktionen
+                    days_since = (datetime.now() - customer.last_interaction).days
+                    return days_since  # Returnera antalet dagar sedan senaste interaktionen
+                
+            # Om vi inte hittar kunden med e-posten, kasta ett undantag
+            raise ValueError(f"Kunden med e-post {email} finns INTE i systemet och kan därmed inte skapa ett ärende!\n")
+
+        except ValueError as e:
+            # Fångar undantaget och skriver ut felmeddelandet
+            print(e)
     
     def customer_interactions(self, email):
+        # Söker efter kunden baserat på e-post
         for customer in self.customers:
             if customer.email == email:
                 if not customer.interactions:
-                    print(f'Kund {customer.name} har inga interaktioner\n')
+                    print(f'Kund {customer.name} har inga interaktioner.\n')
                 else:
                     print(f'Kund {customer.name} interaktioner: {customer.interactions}\n')
+                return  # Avsluta när kunden hittas
+        print(f"Ingen kund med e-post {email} hittades och därmed inga interaktioner.\n")  # Om kunden inte finns
 
 
     def list_customers(self):
@@ -109,7 +122,7 @@ class CustomerDataSystem:
         else:
             print("Lista över alla kunder:")
             for customer in self.customers:
-                print(f"- {customer.name} telefon: {customer.phone}\n")
+                print(f"- Namn: {customer.name}, Email: {customer.email}, Telefon: {customer.phone}\n")
 
 
 
@@ -123,10 +136,10 @@ class CustomerDataSystem:
 
 
 # Testfall
-C1 = Customer('Hilmer', 'hilmer@mail.com', '073205565')
-C2 = Customer('Jakob', 'jakob@mail.com', '083205262')
-C3 = Customer('Felix', 'felix@mail.com', '093205212')
-C4 = Customer('Samuel', 'hilmer@mail.com', '043209621')
+C1 = Customer('Hilmer Tufvasson', 'hilmer@mail.com', '073205565')
+C2 = Customer('Jakob Höglund', 'jakob@mail.com', '083205262')
+C3 = Customer('Felix Torsten', 'felix@mail.com', '093205212')
+C4 = Customer('Samuel Donter', 'hilmer@mail.com', '043209621')
 
 # Lägg till interaktioner
 C1.add_interaction('Köpte en produkt')
@@ -163,16 +176,18 @@ CRM.remove_customer('jakob@mail.com')
 CRM.list_customers()
 
 # Försök ta bort en kund som inte finns
-CRM.remove_customer('okand@mail.com')
+CRM.remove_customer('okand@mail.com') #Value Error
 
-# Ändra telefon
+# Ändra telefonnummer
 CRM.update_customer('hilmer@mail.com')
 
 # Specifik interaktion för kund
 CRM.add_specific_interaction('hilmer@mail.com', 'Hur ska jag ändra min mejladress?')
+CRM.add_specific_interaction('gustav@mail.com', 'Jag kan inte skapa ett ärende för jag finns inte i systemet!')
 
 CRM.customer_interactions('hilmer@mail.com')
 CRM.customer_interactions('felix@mail.com')
+CRM.customer_interactions('jakob@mail.com')
 
 C1.calculate_days_since_last_interaction()
 C2.calculate_days_since_last_interaction()
