@@ -95,6 +95,7 @@ class CustomerDataSystem:
 
                     # Beräkna och returnera antalet dagar sedan senaste interaktionen
                     days_since = (datetime.now() - customer.last_interaction).days
+                    #customer.last_interaction = datetime.now() - timedelta(days=3) #Denna kan användas för testning
                     return days_since  # Returnera antalet dagar sedan senaste interaktionen
                 
             # Om vi inte hittar kunden med e-posten, kasta ett undantag
