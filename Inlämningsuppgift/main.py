@@ -11,8 +11,9 @@ class Customer:
     def add_interaction(self, interaction): #Möjliggör att kunder kan skriva ärende och printar ut interaktionen och datum & tid.
         self.interactions.append(interaction)
         self.last_interaction = datetime.now()
-        print(f"Ny interaktion tillagd för {self.name}: {interaction}")
-        print(f"Senaste interaktionen uppdaterad till: {self.last_interaction}\n")
+        print(f"Ny interaktion för {self.name}: {interaction}")
+        print(f"Senaste interaktion: {self.last_interaction}\n")
+
 
     def calculate_days_since_last_interaction(self): #Räknar ut datum & tid samt dagar på senaste interaktionen
         if self.last_interaction is None:
@@ -90,7 +91,7 @@ class CustomerDataSystem:
 
                     # Beräkna och returnera antalet dagar sedan senaste interaktionen
                     days_since = customer.inactive_days_return()
-                    #customer.last_interaction = datetime.now() - timedelta(days=30) #Denna kan användas för testning
+                    #customer.last_interaction = datetime.now() - timedelta(days=31) #Denna kan användas för testning
                     print(f'Kund {customer.name} har en ny interaktion: {interaction} Antal dagar sedan senaste interaktion: {days_since}\n')
                     return days_since  # Returnerar antalet dagar sedan senaste interaktionen
                 
