@@ -19,18 +19,17 @@ class Customer:
             print(f"Ingen interaktion för {self.name}.\n")
             return None
         print(f"Senaste interaktionen (datum & tid) för {self.name}: {self.last_interaction}")
-        print(self.last_interaction)
         days_since = (datetime.now() - self.last_interaction).days
         print(f"Senaste interaktion i dagar för {self.name}: {days_since}\n")
         return days_since
     
 
 
-
 class CustomerDataSystem:
     def __init__(self, name):
         self.name = name
         self.customers = []
+        print(f"----CustomerDataSystem åt {name}----\n")
 
     def add_customer(self, customer):
         while True:
@@ -38,11 +37,11 @@ class CustomerDataSystem:
                 # Kontrollera om e-posten redan finns
                 for existing_customer in self.customers:
                     if existing_customer.email == customer.email:
-                        raise ValueError(f"En kund med mejladress {customer.email} finns redan i systemet.\n")
+                        raise ValueError(f"\nEn kund med mejladress {customer.email} finns redan i systemet.\n")
             
                 # Om ingen duplicering hittas, lägg till kunden
                 self.customers.append(customer)
-                print(f"Kund {customer.name} med e-post {customer.email} har lagts till.\n")
+                print(f"Kund {customer.name} med e-post {customer.email} har lagts till.")
                 break  # Avsluta loopen
             except ValueError as e:
                 print(e)  # Skriv ut felmeddelandet
@@ -62,7 +61,7 @@ class CustomerDataSystem:
 
             # Om kunden inte finns
             if customer_to_remove is None:
-                raise ValueError(f"Finns ingen kund med mejladress {email}.")
+                raise ValueError(f"\nFinns ingen kund med mejladress {email}.")
             
             # Om kunden hittades, ta bort den
             self.customers.remove(customer_to_remove)
@@ -112,7 +111,8 @@ class CustomerDataSystem:
                 if not customer.interactions:
                     print(f'Kund {customer.name} har inga interaktioner.\n')
                 else:
-                    print(f'Kund {customer.name} interaktioner: {customer.interactions}\n')
+                    print(f'\nKund {customer.name} interaktioner: {customer.interactions}') #Printar kundens alla interaktioner
+                    print(f'Kund {customer.name} senaste interaktion: {customer.interactions[-1]}\n') #Printar kundens senaste interaktion
                 return  # Avsluta när kunden hittas
         print(f"Ingen kund med e-post {email} hittades och därmed inga interaktioner.\n")  # Om kunden inte finns
 
@@ -121,9 +121,9 @@ class CustomerDataSystem:
         if not self.customers:
             print("Det finns inga kunder i systemet\n.")
         else:
-            print("Lista över alla kunder:")
+            print("\nLista över alla kunder:")
             for customer in self.customers:
-                print(f"- Namn: {customer.name}, Email: {customer.email}, Telefon: {customer.phone}\n")
+                print(f"- Namn: {customer.name}, Email: {customer.email}, Telefon: {customer.phone}")
 
 
 
