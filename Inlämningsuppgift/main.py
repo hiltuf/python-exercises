@@ -119,6 +119,8 @@ class CustomerDataSystem:
             print("\nAktiva kunder:")
             for customer in active_customers:
                 print(customer)
+        else:
+            print("Inga aktiva kunder hittades.\n")
 
     
     def customer_interactions(self, email): #Skriver ut kundernas alla interaktionen, senaste interaktionen och ifall ingen interaktion finns eller kunden inte existerar.
