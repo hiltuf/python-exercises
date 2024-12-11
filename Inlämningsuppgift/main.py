@@ -8,13 +8,13 @@ class Customer:
         self.interactions = interactions if interactions is not None else []
         self.last_interaction = last_interaction
 
-    def add_interaction(self, interaction):
+    def add_interaction(self, interaction): #Möjliggör att kunder kan skriva ärende och printar ut interaktionen och datum & tid.
         self.interactions.append(interaction)
-        self.last_interaction = datetime.now()  # Sätt senaste interaktionen till nuvarande tid
+        self.last_interaction = datetime.now()
         print(f"Ny interaktion tillagd för {self.name}: {interaction}")
         print(f"Senaste interaktionen uppdaterad till: {self.last_interaction}\n")
 
-    def calculate_days_since_last_interaction(self):
+    def calculate_days_since_last_interaction(self): #Räknar ut datum & tid samt dagar på senaste interaktionen
         if self.last_interaction is None:
             print(f"Ingen interaktion för {self.name}.\n")
             return None
@@ -24,7 +24,7 @@ class Customer:
         #print(f"Senaste interaktion i dagar för {self.name}: {self.inactive_days_return()}\n") # Bevisning att inactive days för uppdatera i dagar för kunden
         return days_since
     
-    def inactive_days_return(self):
+    def inactive_days_return(self): #Hjälpmetod för att synka ihop klasserna med days_since, ger ut olika värden.
         if not self.last_interaction:
             return None
         return (datetime.now() - self.last_interaction).days #Denna beräknar i Realtid terminal
@@ -34,41 +34,35 @@ class CustomerDataSystem:
     def __init__(self, name):
         self.name = name
         self.customers = []
-        print(f"----CustomerDataSystem åt {name}----\n")
+        print(f"----CustomerDataSystem åt {name}----\n") 
 
-    def add_customer(self, customer):
+    def add_customer(self, customer): #Lägger till kunder i CustomerDataSystemet och kontrollerar att mejl inte redan används. Loopas tills unik mejl angetts
         while True:
             try:
-                # Kontrollera om e-posten redan finns
                 for existing_customer in self.customers:
                     if existing_customer.email == customer.email:
                         raise ValueError(f"\nEn kund med mejladress {customer.email} finns redan i systemet.\n")
             
-                # Om ingen duplicering hittas, lägg till kunden
                 self.customers.append(customer)
                 print(f"Kund {customer.name} med e-post {customer.email} har lagts till.")
-                break  # Avsluta loopen
+                break 
             except ValueError as e:
-                print(e)  # Skriv ut felmeddelandet
+                print(e)
                 customer.email = input(f"Ange en annan e-postadress för {customer.name}: ")
 
 
-    def remove_customer(self, email):
-        # Hitta kund baserat på e-post
+    def remove_customer(self, email): #Möjliggör att ta bort specifika kunder ifall rätt mejl finns i systemet, annars visas felmeddelandet
         try:
-            customer_to_remove = None  # Variabel för att hålla den kund som ska tas bort
+            customer_to_remove = None 
 
-            # Gå igenom alla kunder och leta efter en matchning
             for customer in self.customers:
                 if customer.email == email:
                     customer_to_remove = customer
-                    break  # Avsluta loopen om vi hittar kunden
+                    break
 
-            # Om kunden inte finns
             if customer_to_remove is None:
                 raise ValueError(f"\nFinns ingen kund med mejladress {email}.")
             
-            # Om kunden hittades, ta bort den
             self.customers.remove(customer_to_remove)
             print(f"Kund {customer_to_remove.name} med e-post {email} har tagits bort.\n")
         
@@ -78,8 +72,7 @@ class CustomerDataSystem:
 
     
 
-    def update_customer(self, email):
-        # Hitta kund baserat på e-post
+    def update_customer(self, email): #Möjliggör att kunder kan uppdatera sitt telefonnummer
         for customer in self.customers:
             if customer.email == email:
                 print(f"Kund {customer.name} telefonnummer: {customer.phone}")
@@ -88,27 +81,24 @@ class CustomerDataSystem:
                 return
         print(f"Ingen kund med e-post {email} hittades.\n")
 
-    def add_specific_interaction(self, email, interaction):
+    def add_specific_interaction(self, email, interaction): #Möjliggör att kunna lägga till specifika interaktionen och uppdaterar alla värden.
         try:
             for customer in self.customers:
                 if customer.email == email:
-                    # Lägg till interaktionen och uppdatera senaste interaktionen
                     customer.interactions.append(interaction)
-                    customer.last_interaction = datetime.now()  # Uppdatera senaste interaktionstidpunkt
+                    customer.last_interaction = datetime.now() 
 
                     # Beräkna och returnera antalet dagar sedan senaste interaktionen
                     days_since = customer.inactive_days_return()
                     #customer.last_interaction = datetime.now() - timedelta(days=30) #Denna kan användas för testning
                     print(f'Kund {customer.name} har en ny interaktion: {interaction} Antal dagar sedan senaste interaktion: {days_since}\n')
-                    return days_since  # Returnera antalet dagar sedan senaste interaktionen
+                    return days_since  # Returnerar antalet dagar sedan senaste interaktionen
                 
-            # Om vi inte hittar kunden med e-posten, kasta ett undantag
             raise ValueError(f"Kunden med e-post {email} finns INTE i systemet och kan därmed inte skapa ett ärende!\n")
         except ValueError as e:
-            # Fångar undantaget och skriver ut felmeddelandet
             print(e)
     
-    def inactive_user(self):
+    def inactive_user(self): #Listar alla kunder i två grupper (aktiv/inaktiv) baserat på status.
         inactive_customers = []
         active_customers = []
         for customer in self.customers:
@@ -131,8 +121,7 @@ class CustomerDataSystem:
                 print(customer)
 
     
-    def customer_interactions(self, email):
-        # Söker efter kunden baserat på e-post
+    def customer_interactions(self, email): #Skriver ut kundernas alla interaktionen, senaste interaktionen och ifall ingen interaktion finns eller kunden inte existerar.
         for customer in self.customers:
             if customer.email == email:
                 if not customer.interactions:
@@ -144,7 +133,7 @@ class CustomerDataSystem:
         print(f"Ingen kund med e-post {email} hittades och därmed inga interaktioner.\n")  # Om kunden inte finns
 
 
-    def list_customers(self):
+    def list_customers(self): #Listar alla kunder i systemet
         if not self.customers:
             print("Det finns inga kunder i systemet\n.")
         else:
@@ -215,11 +204,13 @@ CRM.update_customer('hilmer@mail.com')
 CRM.add_specific_interaction('hilmer@mail.com', 'Hur ska jag ändra min mejladress?')
 CRM.add_specific_interaction('gustav@mail.com', 'Jag kan inte skapa ett ärende för jag finns inte i systemet!')
 
+#Skriver ut kundernas interaktioner
 CRM.customer_interactions('hilmer@mail.com')
 CRM.customer_interactions('felix@mail.com')
 CRM.customer_interactions('jakob@mail.com')
 
-
+#Räknar ut dagarna sen senaste interaction för att få uppdatering i realtid
 C1.calculate_days_since_last_interaction()
 
+#Listar alla kunder baserat på status (aktiv/inaktiv)
 CRM.inactive_user()
