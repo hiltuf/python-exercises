@@ -21,14 +21,14 @@ class Customer:
         print(f"Senaste interaktionen (datum & tid) för {self.name}: {self.last_interaction}")
         days_since = (datetime.now() - self.last_interaction).days
         print(f"Senaste interaktion i dagar för {self.name}: {days_since}\n")
-        #print(f"Senaste interaktion i dagar för {self.name}: {self.inactive_days_return()}\n") # Bevisning att inactive days fungerar 
+        #print(f"Senaste interaktion i dagar för {self.name}: {self.inactive_days_return()}\n") # Bevisning att inactive days för uppdatera i dagar för kunden
         return days_since
     
     def inactive_days_return(self):
         if not self.last_interaction:
             return None
         return (datetime.now() - self.last_interaction).days #Denna beräknar i Realtid terminal
-        #return 31 # Denna har jag för att visa att dagarna faktiskt räknas
+        #return 31 # Denna har jag för att visa att dagarna faktiskt räknas i inaktiva kunder printen
 
 class CustomerDataSystem:
     def __init__(self, name):
@@ -109,12 +109,26 @@ class CustomerDataSystem:
             print(e)
     
     def inactive_user(self):
+        inactive_customers = []
+        active_customers = []
         for customer in self.customers:
-                days_since = customer.inactive_days_return()
-                if days_since is not None and days_since >= 30:
-                    print(f"{customer.name} är inaktiv. {days_since} dagar sedan senaste interaktion.")
-                else:
-                    print(f"{customer.name} är aktiv eller har ingen interaktion registrerad. {days_since}")
+            days_since = customer.inactive_days_return()
+            if days_since is not None and days_since > 30:
+                inactive_customers.append(f"{customer.name} är inaktiv. {days_since} dagar sedan senaste interaktion.")
+            else:
+                active_customers.append(f"{customer.name} är aktiv eller har ingen interaktion registrerad. {days_since}")
+        
+        if inactive_customers:
+            print("\nInaktiva kunder:")
+            for customer in inactive_customers:
+                print(customer)
+        else:
+            print("Inga inaktiva kunder hittades.\n")
+
+        if active_customers:
+            print("\nAktiva kunder:")
+            for customer in active_customers:
+                print(customer)
 
     
     def customer_interactions(self, email):
