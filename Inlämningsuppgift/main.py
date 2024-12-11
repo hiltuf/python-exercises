@@ -129,8 +129,8 @@ class CustomerDataSystem:
                 else:
                     print(f'\nKund {customer.name} interaktioner: {customer.interactions}') #Printar kundens alla interaktioner
                     print(f'Kund {customer.name} senaste interaktion: {customer.interactions[-1]}\n') #Printar kundens senaste interaktion
-                return  # Avsluta när kunden hittas
-        print(f"Ingen kund med e-post {email} hittades och därmed inga interaktioner.\n")  # Om kunden inte finns
+                return 
+        print(f"Ingen kund med e-post {email} hittades och därmed inga interaktioner.\n")  
 
 
     def list_customers(self): #Listar alla kunder i systemet
