@@ -21,9 +21,14 @@ class Customer:
         print(f"Senaste interaktionen (datum & tid) för {self.name}: {self.last_interaction}")
         days_since = (datetime.now() - self.last_interaction).days
         print(f"Senaste interaktion i dagar för {self.name}: {days_since}\n")
+        #print(f"Senaste interaktion i dagar för {self.name}: {self.inactive_days_return()}\n") # Bevisning att inactive days fungerar 
         return days_since
     
-
+    def inactive_days_return(self):
+        if not self.last_interaction:
+            return None
+        return (datetime.now() - self.last_interaction).days #Denna beräknar i Realtid terminal
+        #return 31 # Denna har jag för att visa att dagarna faktiskt räknas
 
 class CustomerDataSystem:
     def __init__(self, name):
@@ -89,20 +94,28 @@ class CustomerDataSystem:
                 if customer.email == email:
                     # Lägg till interaktionen och uppdatera senaste interaktionen
                     customer.interactions.append(interaction)
-                    print(f'Kund {customer.name} har en ny interaktion: {interaction}\n')
                     customer.last_interaction = datetime.now()  # Uppdatera senaste interaktionstidpunkt
 
                     # Beräkna och returnera antalet dagar sedan senaste interaktionen
-                    days_since = (datetime.now() - customer.last_interaction).days
-                    #customer.last_interaction = datetime.now() - timedelta(days=3) #Denna kan användas för testning
+                    days_since = customer.inactive_days_return()
+                    #customer.last_interaction = datetime.now() - timedelta(days=30) #Denna kan användas för testning
+                    print(f'Kund {customer.name} har en ny interaktion: {interaction} Antal dagar sedan senaste interaktion: {days_since}\n')
                     return days_since  # Returnera antalet dagar sedan senaste interaktionen
                 
             # Om vi inte hittar kunden med e-posten, kasta ett undantag
             raise ValueError(f"Kunden med e-post {email} finns INTE i systemet och kan därmed inte skapa ett ärende!\n")
-
         except ValueError as e:
             # Fångar undantaget och skriver ut felmeddelandet
             print(e)
+    
+    def inactive_user(self):
+        for customer in self.customers:
+                days_since = customer.inactive_days_return()
+                if days_since is not None and days_since >= 30:
+                    print(f"{customer.name} är inaktiv. {days_since} dagar sedan senaste interaktion.")
+                else:
+                    print(f"{customer.name} är aktiv eller har ingen interaktion registrerad. {days_since}")
+
     
     def customer_interactions(self, email):
         # Söker efter kunden baserat på e-post
@@ -149,6 +162,8 @@ C1.add_interaction('Tvättade golvet')
 C2.add_interaction('Bokade ett möte')
 C2.add_interaction('Mailade en fråga')
 
+#C3.add_interaction('Buuhoooo') #Lägg till för att visa
+
 # Beräkna dagar sedan senaste interaktion
 C1.calculate_days_since_last_interaction()
 C2.calculate_days_since_last_interaction()
@@ -190,5 +205,7 @@ CRM.customer_interactions('hilmer@mail.com')
 CRM.customer_interactions('felix@mail.com')
 CRM.customer_interactions('jakob@mail.com')
 
+
 C1.calculate_days_since_last_interaction()
-C2.calculate_days_since_last_interaction()
+
+CRM.inactive_user()
