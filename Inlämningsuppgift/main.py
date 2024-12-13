@@ -22,14 +22,14 @@ class Customer:
         print(f"Senaste interaktionen (datum & tid) för {self.name}: {self.last_interaction}")
         days_since = (datetime.now() - self.last_interaction).days
         print(f"Senaste interaktion i dagar för {self.name}: {days_since}\n")
-        #print(f"Senaste interaktion i dagar för {self.name}: {self.inactive_days_return()}\n") # Bevisning att inactive days för uppdatera i dagar för kunden
+        #print(f"Senaste interaktion i dagar för {self.name}: {self.inactive_days_return()}\n") # Bevisning för att printen ska hänga med när värdet tilldelas av RAD 94.
         return days_since
     
     def inactive_days_return(self): #Hjälpmetod för att synka ihop klasserna med days_since, ger ut olika värden.
         if not self.last_interaction:
             return None
         return (datetime.now() - self.last_interaction).days #Denna beräknar i Realtid terminal
-        #return 31 # Denna har jag för att visa att dagarna faktiskt räknas i inaktiva kunder printen
+        #return 31 Testing
 
 class CustomerDataSystem:
     def __init__(self, name):
